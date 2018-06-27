@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Conference from './views/Conference.vue'
 import Register from './views/Register.vue'
+import Verify from './views/Verify.vue'
 import SignIn from './views/SignIn.vue'
 import CheckVisitor from './views/CheckVisitor.vue'
 import Login from './views/Login.vue'
@@ -30,11 +31,15 @@ const router = new Router({
     name: 'register',
     component: Register
   }, {
+    path: '/verify/:type/:confId',
+    name: 'verify',
+    component: Verify
+  }, {
     path: '/signIn/:ticketId',
     name: 'signIn',
     component: SignIn
   }, {
-    path: '/checkVisitor/:name/:idNum/:mobile',
+    path: '/checkVisitor/:id/:name/:idNum/:mobile',
     name: 'checkVisitor',
     component: CheckVisitor
   }, {
@@ -42,9 +47,15 @@ const router = new Router({
     name: 'login',
     component: Login,
     beforeEnter: (to, from, next) => {
-      let moveTo = sessionStorage.getItem('moveTo')
-      if (sessionStorage.getItem('user')) {
-        next(moveTo)
+      var now = new Date().getTime()
+      var moveTo = sessionStorage.getItem('moveTo')
+      if (localStorage.getItem('user')) {
+        if (JSON.parse(localStorage.getItem('user')).expire > now) {
+          next(moveTo)
+        } else {
+          localStorage.removeItem('user')
+          next()
+        }
       } else {
         next()
       }
@@ -103,7 +114,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
-    if (sessionStorage.getItem('user')) {
+    if (localStorage.getItem('user')) {
       next()
     } else {
       sessionStorage.setItem('moveTo', to.path)

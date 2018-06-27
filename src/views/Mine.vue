@@ -30,12 +30,12 @@ export default {
   },
   computed: {
     userId: function () {
-      return JSON.parse(sessionStorage.getItem('user')).id
+      return JSON.parse(localStorage.getItem('user')).id
     }
   },
   methods: {
     logout: function () {
-      sessionStorage.removeItem('user')
+      localStorage.removeItem('user')
       this.$router.push('/conference')
     }
   }

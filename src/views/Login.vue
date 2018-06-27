@@ -20,13 +20,14 @@ export default {
   },
   methods: {
     login: function () {
-      let moveTo = sessionStorage.getItem('moveTo')
+      var expire = new Date().getTime() + 604800000
+      var moveTo = sessionStorage.getItem('moveTo')
       this.$http.post('http://47.100.196.172/api/user/login', {
         username: this.username,
         password: md5(this.password)
       }).then(response => {
         if (response.data.status === 1) {
-          sessionStorage.setItem('user', JSON.stringify({'id': response.data.result.id, 'role': response.data.result.role}))
+          localStorage.setItem('user', JSON.stringify({'id': response.data.result.id, 'role': response.data.result.role, 'expire': expire}))
           this.$toasted.show('欢迎回来，' + response.data.result.username, {
             theme: 'primary',
             position: 'bottom-center',

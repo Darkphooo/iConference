@@ -94,7 +94,7 @@ export default {
       this.$http.post('http://47.100.196.172/api/conference/register', {
         confId: this.confInfo.id,
         ticketId: this.checkedTicketId,
-        userId: JSON.parse(sessionStorage.getItem('user')).id
+        userId: JSON.parse(localStorage.getItem('user')).id
       }).then(response => {
         if (response.data.status === 1) {
           this.$toasted.show('报名成功', {

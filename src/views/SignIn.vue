@@ -26,17 +26,23 @@ export default {
     return {
       isBusy: false,
       visitorInfo: {},
-      record: []
+      record: [],
+      type: null,
+      confId: null
     }
   },
   mounted: function () {
+    this.type = parseInt(JSON.parse(localStorage.getItem('confInfo')).type)
+    this.confId = parseInt(JSON.parse(localStorage.getItem('confInfo')).confId)
     this.ticketSignIn()
   },
   methods: {
     ticketSignIn: function () {
       this.isBusy = true
       this.$http.post('http://47.100.196.172/api/ticket/signin', {
-        ticketId: this.$route.params.ticketId
+        ticketId: this.$route.params.ticketId,
+        type: this.type,
+        conferenceId: this.confId
       }).then(response => {
         if (response.data.status === 1) {
           this.visitorInfo = response.data.result.visitorInfo

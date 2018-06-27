@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import md5 from 'js-md5'
 export default {
   name: 'Register',
   data () {
@@ -26,7 +27,7 @@ export default {
     register: function () {
       this.$http.post('http://47.100.196.172/api/user/register', {
         username: this.username,
-        password: this.password,
+        password: md5(this.password),
         name: this.name,
         id_num: this.idNum,
         mobile: this.mobile

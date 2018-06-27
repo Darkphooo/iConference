@@ -1,6 +1,5 @@
 <template>
   <div class="ticket-detail">
-    <mu-linear-progress v-if="isBusy"/>
     <mu-content-block>
       姓名：{{visitorInfo.name}}
     </mu-content-block>
@@ -18,24 +17,42 @@ export default {
   name: 'CheckVisitor',
   data () {
     return {
-      isBusy: false,
       visitorInfo: {
         name: null,
         idNum: null,
         mobile: null
-      }
+      },
+      type: null,
+      confId: null
     }
   },
   mounted: function () {
     this.initData()
+    this.type = parseInt(JSON.parse(localStorage.getItem('confInfo')).type)
+    this.confId = parseInt(JSON.parse(localStorage.getItem('confInfo')).confId)
+    this.checkIn()
   },
   methods: {
     initData: function () {
       this.isBusy = true
+      this.visitorInfo.id = parseInt(this.$route.params.id)
       this.visitorInfo.name = this.$route.params.name
-      this.visitorInfo.idNum = this.$route.params.idNum
-      this.visitorInfo.mobile = this.$route.params.mobile
-      this.isBusy = false
+      this.visitorInfo.idNum = parseInt(this.$route.params.idNum)
+      this.visitorInfo.mobile = parseInt(this.$route.params.mobile)
+    },
+    checkIn: function () {
+      this.$http.post('http://47.100.196.172/api/meeting/signin', {
+        userId: this.visitorInfo.id,
+        type: this.type,
+        meetingId: this.confId
+      }).then(response => {
+        this.$toasted.show(response.data.result.message, {
+          theme: 'primary',
+          position: 'bottom-center',
+          duration: 3000
+        })
+      }, response => {
+      })
     }
   }
 }

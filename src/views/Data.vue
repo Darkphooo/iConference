@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     qrcode: function () {
-      return 'http://47.100.196.172/checkVisitor/' + encodeURI(this.data.name) + '/' + this.data.idNum + '/' + this.data.mobile
+      return 'http://47.100.196.172/checkVisitor/' + this.$route.params.userId + '/' + encodeURI(this.data.name) + '/' + this.data.idNum + '/' + this.data.mobile
     }
   },
   methods: {
